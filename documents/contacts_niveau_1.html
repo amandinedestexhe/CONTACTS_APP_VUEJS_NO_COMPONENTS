@@ -89,6 +89,28 @@
 
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
 
-    <script></script>
+    <script>
+      //Initialisation du localStorage
+      localStorage.contacts = JSON.stringify([
+        {
+          name: "Amandine Destexhe",
+          id: Date.now(),
+          phone: "0483048868",
+          email: "adestexhe@gmail.com",
+        },
+      ]);
+
+      Vue.createApp({
+        data() {
+          return {
+            //Aller chercher ce qu'il y a dans le localstorage ou prendre un tableau indexés vide!
+          };
+        },
+        methods: {},
+        computed: {},
+
+        watch: {},
+      }).mount("#app");
+    </script>
   </body>
 </html>
