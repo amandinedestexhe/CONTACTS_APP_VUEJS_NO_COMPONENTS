@@ -66,9 +66,9 @@
             class="flex justify-between items-center bg-gray-50 p-4 rounded-lg shadow-sm"
           >
             <div>
-              <p class="text-lg font-semibold">Name</p>
-              <p class="text-gray-600">phone</p>
-              <p class="text-gray-600">email</p>
+              <p class="text-lg font-semibold">{{ contacts[0].name }}</p>
+              <p class="text-gray-600">{{ contacts[0].phone }}</p>
+              <p class="text-gray-600">{{ contacts[0].email }}</p>
             </div>
             <div class="flex space-x-2">
               <button
@@ -91,19 +91,20 @@
 
     <script>
       //Initialisation du localStorage
-      localStorage.contacts = JSON.stringify([
-        {
-          name: "Amandine Destexhe",
-          id: Date.now(),
-          phone: "0483048868",
-          email: "adestexhe@gmail.com",
-        },
-      ]);
+      //localStorage.contacts = JSON.stringify([
+      //{
+      //name: "Amandine Destexhe",
+      //id: Date.now(),
+      //phone: "0483048868",
+      //email: "adestexhe@gmail.com",
+      //},
+      //]);
 
       Vue.createApp({
         data() {
           return {
             //Aller chercher ce qu'il y a dans le localstorage ou prendre un tableau indexés vide!
+            contacts: JSON.parse(localStorage.getItem("contacts")) || [],
           };
         },
         methods: {},
