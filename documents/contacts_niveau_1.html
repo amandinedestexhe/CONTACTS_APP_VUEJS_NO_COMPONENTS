@@ -21,6 +21,7 @@
             type="text"
             class="mt-1 block w-full px-3 py-2 bg-gray-100 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
             placeholder="Nom du contact"
+            v-model="inputContact.name"
           />
         </div>
         <div class="mb-4">
@@ -29,6 +30,7 @@
             type="text"
             class="mt-1 block w-full px-3 py-2 bg-gray-100 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
             placeholder="Numéro de téléphone"
+            v-model="inputContact.phone"
           />
         </div>
         <div class="mb-4">
@@ -37,10 +39,12 @@
             type="email"
             class="mt-1 block w-full px-3 py-2 bg-gray-100 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
             placeholder="Adresse email"
+            v-model="inputContact.email"
           />
         </div>
         <button
           class="w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-md"
+          @click.prevent="addOne()"
         >
           Ajouter/Modifier le contact
         </button>
@@ -64,20 +68,24 @@
         <ul class="space-y-4">
           <li
             class="flex justify-between items-center bg-gray-50 p-4 rounded-lg shadow-sm"
+            v-for="contact in contacts"
+            :key="contact.id"
           >
             <div>
-              <p class="text-lg font-semibold">{{ contacts[0].name }}</p>
-              <p class="text-gray-600">{{ contacts[0].phone }}</p>
-              <p class="text-gray-600">{{ contacts[0].email }}</p>
+              <p class="text-lg font-semibold">{{ contact.name }}</p>
+              <p class="text-gray-600">{{ contact.phone }}</p>
+              <p class="text-gray-600">{{ contact.email }}</p>
             </div>
             <div class="flex space-x-2">
               <button
                 class="bg-yellow-400 hover:bg-yellow-500 text-white font-bold py-2 px-4 rounded-md"
+                @click.prevent="updateOneById(id)"
               >
                 Modifier
               </button>
               <button
                 class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-md"
+                @click.prevent="deleteOneById(id)"
               >
                 Supprimer
               </button>
@@ -91,26 +99,61 @@
 
     <script>
       //Initialisation du localStorage
-      //localStorage.contacts = JSON.stringify([
-      //{
-      //name: "Amandine Destexhe",
-      //id: Date.now(),
-      //phone: "0483048868",
-      //email: "adestexhe@gmail.com",
-      //},
-      //]);
+      // localStorage.contacts = JSON.stringify([
+      //   {
+      //     name: "Amandine Destexhe",
+      //     id: Date.now(),
+      //     phone: "0483048868",
+      //     email: "adestexhe@gmail.com",
+      //   },
+      // ]);
+
+      //4. Modification d’un contact existant en utilisant l’id
+      // Objectif : Modifier un contact en utilisant son id.
+      // Méthodes : editOneById(id) et updateOneById(id)
+      // Détails : Lorsque l’utilisateur sélectionne un contact pour modification, utiliser l’id pour retrouver le contact correspondant dans contacts et pré-remplir le formulaire. Sauvegarder les modifications dans contacts via l’id.
+      // Nom de commit : feat: edit and update contact by id
 
       Vue.createApp({
         data() {
           return {
             //Aller chercher ce qu'il y a dans le localstorage ou prendre un tableau indexés vide!
             contacts: JSON.parse(localStorage.getItem("contacts")) || [],
+            inputContact: {
+              name: "",
+              phone: "",
+              email: "",
+              id: null,
+            },
           };
         },
-        methods: {},
-        computed: {},
+        methods: {
+          addOne() {
+            //... = tu prends les valeur de inputProduct mais pas l'objet inputProduct et tu fais un clone des valeurs
+            // Comme cela l'objet ne change pas de valeur!!!!
+            this.inputContact.id = Date.now();
+            this.contacts.push({ ...this.inputContact });
+            this.inputContact.phone = "";
+            this.inputContact.email = "";
+            this.inputContact.name = "";
+            this.inputContact.id = null;
+          },
+        },
+        computed: {
+          contactfind(id) {
+            contacts.find((item) => item.id === id);
+          },
+        },
 
-        watch: {},
+        watch: {
+          contacts: {
+            handler(newValue, oldValue) {
+              //mettre à jour le localStorage
+              localStorage.setItem("contacts", JSON.stringify(this.contacts));
+            },
+            deep: true,
+          },
+        },
       }).mount("#app");
     </script>
   </body>
